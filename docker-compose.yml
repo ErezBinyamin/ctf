@@ -29,7 +29,35 @@ services:
       context: 'chal1/alice/'
     networks:
       - chal1
+  chal2_start:
+    build:
+      context: 'chal2/start/'
+    networks:
+      - frontend
+      - chal2
+    environment: 
+      - SSH_USERS=intern:420:420:/bin/bash
+      - SSH_ENABLE_PASSWORD_AUTH=true
+      #- SSH_ENABLE_ROOT=true
+      #- SSH_ENABLE_ROOT_PASSWORD_AUTH=true
+    volumes:
+      #- ./chal1/start/keys:/etc/ssh/keys
+      - ./chal1/start/entrypoint.d/:/etc/entrypoint.d
+    restart: on-failure
+    ports:
+      - "9001:22"
+  chal2_alice:
+    build:
+      context: 'chal2/alice/'
+    networks:
+      - chal2
+  chal2_bob:
+    build:
+      context: 'chal2/bob/'
+    networks:
+      - chal2
 networks:
   frontend:
   chal1:
+  chal2:
 

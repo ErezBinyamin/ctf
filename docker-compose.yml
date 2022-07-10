@@ -19,11 +19,16 @@ services:
       #- SSH_ENABLE_ROOT=true
       #- SSH_ENABLE_ROOT_PASSWORD_AUTH=true
     volumes:
-      - ./chal1/start/keys:/etc/ssh/keys
+      #- ./chal1/start/keys:/etc/ssh/keys
       - ./chal1/start/entrypoint.d/:/etc/entrypoint.d
     restart: on-failure
     ports:
       - "9000:22"
+  chal1_alice:
+    build:
+      context: 'chal1/alice/'
+    networks:
+      - chal1
 networks:
   frontend:
   chal1:

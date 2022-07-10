@@ -1,0 +1,30 @@
+version: "3.2"
+services:
+  ctfd:
+    image: ctfd/ctfd:latest
+    restart: on-failure
+    networks:
+      - frontend
+    ports:
+      - 8000:8000
+  chal1_start:
+    build:
+      context: 'chal1/start/'
+    networks:
+      - frontend
+      - chal1
+    environment: 
+      - SSH_USERS=intern:420:420:/bin/bash
+      - SSH_ENABLE_PASSWORD_AUTH=true
+      #- SSH_ENABLE_ROOT=true
+      #- SSH_ENABLE_ROOT_PASSWORD_AUTH=true
+    volumes:
+      - ./chal1/start/keys:/etc/ssh/keys
+      - ./chal1/start/entrypoint.d/:/etc/entrypoint.d
+    restart: on-failure
+    ports:
+      - "9000:22"
+networks:
+  frontend:
+  chal1:
+

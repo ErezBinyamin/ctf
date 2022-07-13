@@ -7,9 +7,9 @@ services:
       - frontend
     ports:
       - 8000:8000
-  chal1_start:
+  start1:
     build:
-      context: 'chal1/start/'
+      context: 'chal1/start1/'
     networks:
       - frontend
       - chal1
@@ -20,18 +20,23 @@ services:
       #- SSH_ENABLE_ROOT_PASSWORD_AUTH=true
     volumes:
       #- ./chal1/start/keys:/etc/ssh/keys
-      - ./chal1/start/entrypoint.d/:/etc/entrypoint.d
+      - ./chal1/start1/entrypoint.d/:/etc/entrypoint.d
     restart: on-failure
     ports:
       - "9000:22"
-  chal1_alice:
+    depends_on:
+      - ctfd
+  alice1:
     build:
-      context: 'chal1/alice/'
+      context: 'chal1/alice1/'
     networks:
       - chal1
-  chal2_start:
+    depends_on:
+      - ctfd
+      - start1
+  start2:
     build:
-      context: 'chal2/start/'
+      context: 'chal2/start2/'
     networks:
       - frontend
       - chal2
@@ -42,20 +47,29 @@ services:
       #- SSH_ENABLE_ROOT_PASSWORD_AUTH=true
     volumes:
       #- ./chal1/start/keys:/etc/ssh/keys
-      - ./chal1/start/entrypoint.d/:/etc/entrypoint.d
+      - ./chal2/start2/entrypoint.d/:/etc/entrypoint.d
     restart: on-failure
     ports:
       - "9001:22"
-  chal2_alice:
+    depends_on:
+      - ctfd
+  alice2:
     build:
-      context: 'chal2/alice/'
+      context: 'chal2/alice2/'
     networks:
       - chal2
-  chal2_bob:
+    depends_on:
+      - ctfd
+      - start2
+  bob2:
     build:
-      context: 'chal2/bob/'
+      context: 'chal2/bob2/'
     networks:
       - chal2
+    depends_on:
+      - ctfd
+      - start2
+      - alice2
 networks:
   frontend:
   chal1:

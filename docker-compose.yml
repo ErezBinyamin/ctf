@@ -61,7 +61,51 @@ services:
     depends_on:
       - ctfd
       - start2
+  start3:
+    build:
+      context: 'chal3/start3/'
+    networks:
+      - frontend
+      - chal3
+    environment: 
+      - SSH_USERS=intern:420:420:/bin/bash
+      - SSH_ENABLE_PASSWORD_AUTH=true
+      #- SSH_ENABLE_ROOT=true
+      #- SSH_ENABLE_ROOT_PASSWORD_AUTH=true
+    volumes:
+      - ./chal3/start3/entrypoint.d/:/etc/entrypoint.d
+    restart: on-failure
+    ports:
+      - "9002:22"
+    depends_on:
+      - ctfd
+  alice3:
+    build:
+      context: 'chal3/alice3/'
+    networks:
+      - chal3
+    depends_on:
+      - ctfd
+      - start3
+  end3:
+    build:
+      context: 'chal3/end3/'
+    networks:
+      - chal3
+    environment: 
+      - SSH_USERS=user:420:420:/bin/bash
+      - SSH_ENABLE_PASSWORD_AUTH=true
+      #- SSH_ENABLE_ROOT=true
+      #- SSH_ENABLE_ROOT_PASSWORD_AUTH=true
+    volumes:
+      - ./chal3/end3/entrypoint.d/:/etc/entrypoint.d
+    restart: on-failure
+    depends_on:
+      - ctfd
+      - alice3
+      - start3
 networks:
   frontend:
   chal1:
   chal2:
+  chal3:

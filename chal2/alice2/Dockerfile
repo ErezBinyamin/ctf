@@ -1,6 +1,3 @@
-FROM alpine:latest
-RUN apk update && \
-    apk add bash
-EXPOSE 1234
+FROM instrumentisto/nmap:latest
 COPY app.sh .
-CMD bash app.sh 1234
+ENTRYPOINT ./app.sh

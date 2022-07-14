@@ -61,15 +61,6 @@ services:
     depends_on:
       - ctfd
       - start2
-  bob2:
-    build:
-      context: 'chal2/bob2/'
-    networks:
-      - chal2
-    depends_on:
-      - ctfd
-      - start2
-      - alice2
 networks:
   frontend:
   chal1:

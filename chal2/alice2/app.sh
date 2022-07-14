@@ -1,6 +1,5 @@
 #!/bin/sh
-PORT=${1:-1234}
 while :
 do
-    nc -klp ${PORT}
+  nping --data-string "flag{nping_is_a_cool_thing}" --tcp -p 80,443 start2
 done
